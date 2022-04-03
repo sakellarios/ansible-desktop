@@ -1,13 +1,31 @@
 ---
-- hosts: localhost
-  connection: local
-  become: true
-
-  tasks:
-  - name: Install packages
-    package:
-      name: 
-        - htop
-        - tmux
-        - vim-nox
-
+ - hosts: localhost
+   connection: local
+   become: true
+ 
+   tasks:
+   - name: install packages
+     package:
+       name:
+         - htop
+         - tmux
+         - vim-nox
+ 
+   - name: copy wallpaper file
+     copy:
+       src: files/wallpaper.jpg
+       dest: /usr/share/backgrounds/ansible-wallpaper.jpg
+       owner: root
+       group: root
+ 
+   - name: set wallpaper
+     become_user: nikolaos
+     dconf:
+       key: "/org/gnome/desktop/background/picture-uri"
+       value: "'file:///usr/share/backgrounds/ansible-wallpaper.jpg'"
+ 
+   - name: set wallpaper position
+     become_user: nikolaos
+     dconf:
+       key: "/org/gnome/desktop/background/picture-options"
+       value: "'zoom'"
